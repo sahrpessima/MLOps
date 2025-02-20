@@ -21,6 +21,11 @@ MODELS_DIR = PROJ_ROOT / "models"
 REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 
+CLASSES = ["owl", "house", "water bottle"]
+N_RESULTS = 50
+ROOT_DIR = "/content/drive/My Drive/dataset"
+
+
 # If tqdm is installed, configure loguru with tqdm.write
 # https://github.com/Delgan/loguru/issues/135
 try:

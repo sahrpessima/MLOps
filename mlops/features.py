@@ -1,29 +1,25 @@
-from pathlib import Path
+import torch
+from torchvision.transforms import v2
 
-import typer
-from loguru import logger
-from tqdm import tqdm
+IMAGE_SIZE = (224, 285)
 
-from mlops.config import PROCESSED_DATA_DIR
-
-app = typer.Typer()
-
-
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Generating features from dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Features generation complete.")
-    # -----------------------------------------
-
-
-if __name__ == "__main__":
-    app()
+def get_transforms():
+    transforms_train = v2.Compose([
+        v2.ToImage(),
+        v2.RandomPerspective(distortion_scale=0.3, p=1.0),
+        v2.RandomRotation(10),
+        v2.RandomHorizontalFlip(),
+        v2.RandomResizedCrop(size=IMAGE_SIZE, antialias=True),
+        v2.ToTensor(),
+        lambda x: (x / 255)
+    ])
+    
+    transforms_test = v2.Compose([
+        v2.ToImage(),
+        v2.ToDtype(torch.float32),
+        v2.Resize(size=IMAGE_SIZE, antialias=True),
+        v2.ToTensor(),
+        lambda x: (x / 255),
+    ])
+    
+    return transforms_train, transforms_test

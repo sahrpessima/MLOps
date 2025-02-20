@@ -7,17 +7,7 @@ python-dotenv
 tqdm
 typer
 -e .
-# duckduckgo_search
-# google
-# requests
-# numpy
-# torch
-# torchvision
-# matplotlib
-# timm
-# PIL
 duckduckgo-search
-concurrent.futures
 torch
 torchvision
 wget

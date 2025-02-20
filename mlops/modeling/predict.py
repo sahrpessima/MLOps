@@ -1,8 +1,21 @@
+from pathlib import Path
+
+import typer
+from loguru import logger
+from tqdm import tqdm
 import torch
 import torch.nn.functional as F
 
-def predict(model, dataloader, device):
-    """Функция для инференса модели."""
+from mlops.config import MODELS_DIR, PROCESSED_DATA_DIR
+
+app = typer.Typer()
+
+
+@app.command()
+def main(
+    model, dataloader, device
+):
+
     model.eval()
     predictions = []
     with torch.no_grad():
@@ -13,3 +26,7 @@ def predict(model, dataloader, device):
             predicted_classes = torch.argmax(probs, dim=1)
             predictions.extend(predicted_classes.cpu().numpy())
     return predictions
+
+
+if __name__ == "__main__":
+    app()

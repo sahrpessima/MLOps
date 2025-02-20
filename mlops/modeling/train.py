@@ -1,9 +1,23 @@
+from pathlib import Path
+
+import typer
+from loguru import logger
+from tqdm import tqdm
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 
-def train_model(model, train_loader, test_loader, device, num_epochs=10, lr=1e-1, save_path='models/model.onnx'):
+from mlops.config import MODELS_DIR, PROCESSED_DATA_DIR
+
+app = typer.Typer()
+
+
+@app.command()
+def main(
+    model, train_loader, test_loader, device, num_epochs=10, lr=1e-1, save_path='models/model.onnx'
+):
+
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.AdamW(lr=lr, params=model.parameters())
     scheduler = lr_scheduler.StepLR(optimizer, step_size=2)
@@ -48,3 +62,8 @@ def train_model(model, train_loader, test_loader, device, num_epochs=10, lr=1e-1
     print(f'Model exported to {save_path}')
     
     return logs
+
+
+
+if __name__ == "__main__":
+    app()
